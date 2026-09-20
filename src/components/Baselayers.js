@@ -20,30 +20,25 @@ export function BaseLayers(map, maxZoom) {
     // Open Street Map layer 
     const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: maxZoom, 
-        // attribution: '© OpenStreetMap' + devs,
     });
 
     // ESRI World Street Map 
     const ewsp = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
         maxZoom: maxZoom,
-        // attribution: 'Tiles &copy; Esri' + devs,
     });
 
     // ESRI World Topo Map 
     const ewtm = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
         maxZoom: maxZoom, 
-        // attribution: 'Tiles &copy; Esri' + devs,
     });
 
     // ESRI World Imagery 
     const ewi = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         maxZoom: maxZoom,
-        // attribution: 'Tiles &copy; Esri' + devs,
     }).addTo(map);
 
     // ESRI World Gray Canvas 
     var ewgc = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-        // attribution: 'Tiles &copy; Esri' + devs,
         maxZoom: maxZoom,
     });
 

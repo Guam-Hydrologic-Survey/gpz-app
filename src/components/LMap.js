@@ -34,7 +34,6 @@ export function LMap(element) {
     layerControl.addTo(map);
 
     const zoomControl = L.control.zoom({
-        // options: topleft, topright, bottomleft, bottomright
         position: 'bottomright'
     });
     zoomControl.addTo(map);
@@ -149,21 +148,3 @@ function getData(gpz_map) {
         polygon.addTo(map);
     });
 };
-
-function darkenHex(hex, pct) {
-    hex = hex.replace("#", ""); // clean string, remove #
-
-    // parse rgb 
-    let r = parseInt(hex.substring(0, 2), 16);
-    let g = parseInt(hex.substring(2, 4), 16);
-    let b = parseInt(hex.substring(4, 6), 16);
-
-    // reduce each channel by pct
-    r = Math.max(0, Math.floor( r * (1 - pct / 100)));
-    g = Math.max(0, Math.floor( r * (1 - pct / 100)));
-    b = Math.max(0, Math.floor( r * (1 - pct / 100)));
-
-    // convert back to hex, padding with 0 if needed 
-    const DARK_HEX = (n) => n.toString(16).padStart(2, "0");
-    return `#${DARK_HEX(r)}${DARK_HEX(g)}${DARK_HEX(b)}`;
-}
