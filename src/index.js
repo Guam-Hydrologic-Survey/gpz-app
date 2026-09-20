@@ -17,7 +17,4 @@ app.append(NavBar(), MapContainer());
 
 document.body.append(About(), Legend());
 
-// NavBar(document.getElementById("nav-bar"));
-// About(document.getElementById("info"));
-// Legend(document.getElementById("legend"));
 LMap(document.getElementById("map"));
