@@ -25,11 +25,11 @@ export function About() {
     // list associated technical reports
     const assoc_trs = [
       {
-        url: "https://ghs-cdn.uog.edu/wp-content/databases/Library/PDFs/TRs/WERI%20TR%20180%20-%20Valerio%20et%20al%202023.pdf",
-        title: "MAppFx: Production Well Nitrates Northern Guam Lens Aquifer",
-        num: 180,
-        author: "Valerio et al.",
-        year: 2023,
+        url: "",
+        title: "",
+        num: 0,
+        author: "",
+        year: 0,
       }
     ];
 
@@ -37,54 +37,54 @@ export function About() {
     tr_btn_grp.className = "btn-group";
 
     // btn for technical report 
-    const tr_btn = document.createElement("a");
-    tr_btn.className = "btn btn-primary";
-    tr_btn.setAttribute("title", "Coming soon!"); // update to tr.title when available 
-    tr_btn.setAttribute("href", tr.url);
-    tr_btn.setAttribute("target", "_blank");
-    tr_btn.setAttribute("rel", "noreferrer noopener");
-    tr_btn.setAttribute("role", "button");
-    tr_btn.textContent = "WERI Technical Report"; // update with num when available 
+    // const tr_btn = document.createElement("a");
+    // tr_btn.className = "btn btn-primary";
+    // tr_btn.setAttribute("title", "Coming soon!"); // update to tr.title when available 
+    // tr_btn.setAttribute("href", tr.url);
+    // tr_btn.setAttribute("target", "_blank");
+    // tr_btn.setAttribute("rel", "noreferrer noopener");
+    // tr_btn.setAttribute("role", "button");
+    // tr_btn.textContent = "WERI Technical Report"; // update with num when available 
     
-    // dropdown btn for assoc. technical reports 
-    const toggle_dropdown = document.createElement("button");
-    toggle_dropdown.className = "btn btn-primary dropdown-toggle dropdown-toggle-split";
-    toggle_dropdown.setAttribute("role", "button");
-    toggle_dropdown.setAttribute("data-bs-toggle", "dropdown");
-    toggle_dropdown.setAttribute("aria-expanded", "false");
-    toggle_dropdown.setAttribute("title", "View associated technical reports");
+    // // dropdown btn for assoc. technical reports 
+    // const toggle_dropdown = document.createElement("button");
+    // toggle_dropdown.className = "btn btn-primary dropdown-toggle dropdown-toggle-split";
+    // toggle_dropdown.setAttribute("role", "button");
+    // toggle_dropdown.setAttribute("data-bs-toggle", "dropdown");
+    // toggle_dropdown.setAttribute("aria-expanded", "false");
+    // toggle_dropdown.setAttribute("title", "View associated technical reports");
 
-    toggle_dropdown.innerHTML = /*html*/ `
-    <span class="visually-hidden">Toggle Dropdown</span>
-    `;
+    // toggle_dropdown.innerHTML = /*html*/ `
+    // <span class="visually-hidden">Toggle Dropdown</span>
+    // `;
 
-    const dropdown_menu = document.createElement("ul");
-    dropdown_menu.className = "dropdown-menu";
+    // const dropdown_menu = document.createElement("ul");
+    // dropdown_menu.className = "dropdown-menu";
 
-    // create first list item in dropdown menu
-    dropdown_menu.innerHTML = /*html*/ `
-    <li class="dropdown-item">Associated Technical Reports</li>
-    <li><hr class="dropdown-divider"></li>
-    `;
+    // // create first list item in dropdown menu
+    // dropdown_menu.innerHTML = /*html*/ `
+    // <li class="dropdown-item">Associated Technical Reports</li>
+    // <li><hr class="dropdown-divider"></li>
+    // `;
 
-    // iterate through assoc_trs list to populate dropdown menu 
-    assoc_trs.forEach(tr => {
-      const li = document.createElement("li"); // wrapper for a tag
-      const a = document.createElement("a"); 
+    // // iterate through assoc_trs list to populate dropdown menu 
+    // assoc_trs.forEach(tr => {
+    //   const li = document.createElement("li"); // wrapper for a tag
+    //   const a = document.createElement("a"); 
 
-      // a tag contents 
-      a.className = "dropdown-item";
-      a.setAttribute("href", tr.url);
-      a.setAttribute("target", "_blank");
-      a.setAttribute("rel", "noreferrer noopener");
-      a.setAttribute("title", tr.title);
-      a.textContent = `WERI TR ${tr.num} (${tr.author}, ${tr.year})`;
+    //   // a tag contents 
+    //   a.className = "dropdown-item";
+    //   a.setAttribute("href", tr.url);
+    //   a.setAttribute("target", "_blank");
+    //   a.setAttribute("rel", "noreferrer noopener");
+    //   a.setAttribute("title", tr.title);
+    //   a.textContent = `WERI TR ${tr.num} (${tr.author}, ${tr.year})`;
 
-      li.append(a);
-      dropdown_menu.append(li);
-    });
+    //   li.append(a);
+    //   dropdown_menu.append(li);
+    // });
 
-    tr_btn_grp.append(tr_btn, toggle_dropdown, dropdown_menu);
+    // tr_btn_grp.append(tr_btn, toggle_dropdown, dropdown_menu);
 
     // modal header 
     const header = document.createElement("div");
@@ -121,7 +121,7 @@ export function About() {
     `;
     
     // first, add dropdown menu for assoc. technical reports 
-    footer.append(tr_btn_grp);
+    // footer.append(tr_btn_grp);
 
     // lastly, add map libraries 
     footer.insertAdjacentHTML("beforeend", map_libs);
