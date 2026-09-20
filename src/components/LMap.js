@@ -97,6 +97,7 @@ export function LMap(element) {
 
     map.addControl(drawControl);
 
+    // draw control events
     map.on(L.Draw.Event.CREATED, function(event) {
         var layer = event.layer;
         drawnFeatures.addLayer(layer);
@@ -106,8 +107,8 @@ export function LMap(element) {
         layerControl.addOverlay(drawnFeatures, "Drawings");
     };
 
+    // loop to retrieve data --> calls getData() 
     for (const item of gpz_maps) {
-        console.log(item.map);
         getData(item.map);
     }
 }
