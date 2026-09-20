@@ -11,7 +11,7 @@ import { BaseLayers } from "./Baselayers.js";
 import { gpz_maps } from "../constants/paths.js";
 
 // map settings 
-const center = [13.5435056,144.7478083];
+const center = [13.54487489195821, 144.81662750244143];
 const defaultZoom = 12;
 const maxZoom = 19; 
 
@@ -58,7 +58,7 @@ export function LMap(element) {
             polyline: {
                 allowIntersection: true,
                 shapeOptions: {
-                    color: "orange"
+                    color: "red"
                 }
             },
             polygon: {
@@ -66,7 +66,7 @@ export function LMap(element) {
                 showArea: true,
                 showLength: true,
                 shapeOptions: {
-                    color: "purple",
+                    color: "white",
                     clickable: true
                 }
             },
@@ -109,13 +109,13 @@ export function LMap(element) {
 
     // loop to retrieve data --> calls getData() 
     for (const item of gpz_maps) {
-        getData(item.map);
+        getData(item.map, layerControl);
     }
 }
 
 // retrieves json and adds to leaflet map 
 // param: path - string containing filepath 
-function getData(gpz_map) {
+function getData(gpz_map, layerControl) {
     fetch(gpz_map.path)
     .then(response => response.json())
     .then(geojson => {
@@ -146,6 +146,8 @@ function getData(gpz_map) {
                 >${gpz_map.name}</a>
             `);
 
+        // add to map and layer control 
         polygon.addTo(map);
+        layerControl.addOverlay(polygon, `${gpz_map.name}`);
     });
 };

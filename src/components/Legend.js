@@ -1,25 +1,36 @@
 /* 
 Legend.js
-Parameters: "element" - HTML element with ID for legend left side panel offcanvas 
-Return: none
+Description: Creates the Legend component
 */
 
-export function Legend(element) {
-    element.innerHTML = /*html*/
-    `
-    <div class="offcanvas offcanvas-start offcanvas-size-xl rounded shadow bg-body" data-bs-scroll="true" tabindex="-1" id="legend-offcanvas" aria-labelledby="offcanvasWithBothOptionsLabel" data-bs-backdrop="false">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel"></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
+export function Legend() {
 
-      <div class="offcanvas-body">
-        <!-- replace/update this section with legend values -->
-        <h3>Legend</h3>
-        <hr>
-        <p>Legend content goes here...</p>
-      </div>
+    const legend = document.createElement("div");
 
-    </div>
-    `
+    legend.className = "offcanvas offcanvas-start";
+    legend.tabIndex = -1;
+    legend.id = "legend-offcanvas";
+
+    legend.setAttribute("data-bs-scroll", "true");
+    legend.setAttribute("data-bs-backdrop", "false");
+
+    // legend header 
+    const header = document.createElement("div");
+    header.className = "offcanvas-header";
+    header.innerHTML = /*html*/ `
+    <h2 class="offcanvas-title text-font-style-roboto-slab" id="offcanvasScrollingLabel">Legend</h2>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    `;
+
+    // legend contents 
+    const contents = document.createElement("div");
+    contents.className = "offcanvas-body";
+    contents.id = "legend-contents";
+
+    contents.innerHTML = /*html*/ `
+    `;
+
+    legend.append(header, contents);
+
+    return legend; 
 }

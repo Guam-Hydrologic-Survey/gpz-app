@@ -13,7 +13,7 @@ export function BaseLayers(map, maxZoom) {
 
     let attributionControl = L.control.attribution().addTo(map);
 
-    attributionControl.setPrefix('<a href="https://leafletjs.com/">Leaflet</a> | Tiles by Esri & OpenStreetMap | <a href="https://weri.uog.edu/">WERI</a> - <a href="https://guamhydrologicsurvey.uog.edu/">GHS</a>: Information Management Team 2026');
+    attributionControl.setPrefix('<a href="https://leafletjs.com/">Leaflet</a> | Tiles by Esri & OpenStreetMap (OSM) | <a href="https://weri.uog.edu/">WERI</a> - <a href="https://guamhydrologicsurvey.uog.edu/">GHS</a>: Information Management Team 2026');
     
     const devs = ` | <a href="https://weri.uog.edu/">WERI</a> - <a href="https://guamhydrologicsurvey.uog.edu/">Guam Hydrologic Survey (GHS)</a>: ${names} ${year}`;
 
