@@ -4,9 +4,9 @@ Description: Entry point for project. Appends all components to #app in index.ht
 */
 
 // components 
-import { About } from "./components/About_v2.js";
-import { NavBar } from "./components/NavBar_v2.js";
-import { Legend } from "./components/Legend_v2.js";
+import { About } from "./components/About.js";
+import { NavBar } from "./components/NavBar.js";
+import { Legend } from "./components/Legend.js";
 import { MapContainer } from "./components/MapContainer.js";
 import { LMap } from "./components/LMap.js";
 
