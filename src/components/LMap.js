@@ -6,75 +6,26 @@ Return: none
 
 // components 
 import { BaseLayers } from "./Baselayers.js";
-import { SidePanel } from "./SidePanel.js";
-import { MarkerPopup } from "./MarkerPopup.js";
-import { MultiplePlots } from "./Plot.js";
-import { completeSelection, additionalSelection, alreadySelected } from "./Toast.js";
-import { SelectionView, choices, choicesLayers, createCheckBox } from "./SelectionView.js";
 
-// utils 
-import { geoJsonUrl } from "../utils/dataSource.js";
-import { createChoice } from "../utils/createChoice.js";
+// constants 
+import { gpz_maps } from "../constants/paths.js";
 
-let geoJsonData;
+// map settings 
+const center = [13.5435056,144.7478083];
+const defaultZoom = 12;
+const maxZoom = 19; 
 
-let selectionMode = "";
-
-const lassoControl = L.control.lasso({ position: "bottomright" });
-
-let pointSelectBtnState = false;
-let pointSelectLayers = [];
-
-const pointSelectBtn = L.easyButton({
-    states: [
-        {
-            stateName: 'detrigger-pointSelectBtn',
-            icon: '<img src="./src/assets/hand-index-thumb.svg">',
-            title: 'Select points to plot on click',
-            onClick: function(btn, map) {
-                console.log("Turned on point selection through click");
-                btn.state('trigger-pointSelectBtn');
-                pointSelectBtnState = true;
-                console.log(pointSelectBtnState);
-                map.on("click", function(point) {
-                    console.log(point.latlng);
-                    // console.log(point.target.feature.properties.name);
-                    console.log("Selected a point.")
-                });
-                selectionMode = "click";
-                // additionalSelection(document.getElementById("notif"));
-                SelectionView();
-            }
-        },
-        {
-            stateName: 'trigger-pointSelectBtn',
-            icon: '<img src="./src/assets/hand-index-thumb-fill.svg">',
-            title: "Turn off click-on-point selection",
-            onClick: function(btn) {
-                console.log("Turned off point selection through click");
-                btn.state('detrigger-pointSelectBtn');
-                pointSelectBtnState = false;
-                pointSelectLayers = [];
-                // choicesLayers = [];
-                const selectionView = document.getElementById("selection-view-offcanvas");
-                const selectionViewOffcanvas = bootstrap.Offcanvas.getOrCreateInstance(selectionView);
-                selectionViewOffcanvas.hide();
-            }
-        }
-    ]
-});
+// set map as global variable 
+let map;
 
 export function LMap(element) {
 
-    const center = [13.5435056,144.7478083];
-    const defaultZoom = 12;
-    const maxZoom = 19; 
-
-    // creates Leaflet map 
-    const map = L.map(element, {
+    // create leaflet map 
+    map = L.map(element, {
         center: center,
         zoom: defaultZoom,
         zoomControl: false,
+        attributionControl: false,
     });
 
     const baseLayers = BaseLayers(map, maxZoom);
@@ -88,7 +39,7 @@ export function LMap(element) {
     });
     zoomControl.addTo(map);
 
-    const resetZoomBtn = L.easyButton('<img src="./src/assets/geo-fill.svg">', function() {
+    const resetZoomBtn = L.easyButton('<img src="./src/assets/arrow-clockwise.svg">', function() {
         map.setView(center, defaultZoom);
     }, "Reset map view");
 
@@ -154,169 +105,65 @@ export function LMap(element) {
 
     if (map.hasLayer(drawnFeatures)) {
         layerControl.addOverlay(drawnFeatures, "Drawings");
-    } 
+    };
 
-    // console.log(pointSelectBtn.options.states);
-
-    const pointSelectionControls = L.easyBar([
-        pointSelectBtn,
-    ], { position: "bottomright" });
-
-    pointSelectionControls.addTo(map);
-    
-    lassoControl.addTo(map); 
-
-    // hides tooltip based on zoom level 
-    map.on('zoomend', function(z) {
-        var zoomLevel = map.getZoom();
-        if (zoomLevel >= 15 ){
-            [].forEach.call(document.querySelectorAll('.leaflet-tooltip'), function (t) {
-                t.style.visibility = 'visible';
-            });
-        } else {
-            [].forEach.call(document.querySelectorAll('.leaflet-tooltip'), function (t) {
-                t.style.visibility = 'hidden';
-            });
-        }
-    });
-
-    // array holding well with status for use on point selection through click 
-    // let choices = [];
-    
-    // get data 
-    fetch(geoJsonUrl)
-        .then(response => response.json())
-        .then(geojson => {
-            let popup = L.popup()
-            const getValues = (feature, layer) => {
-                // popup with basic well info and buttons for stats and plot
-                layer.bindPopup(MarkerPopup(feature.properties.name, feature.properties.basin, feature.properties.lat, feature.properties.lon, feature.properties.desc)); 
-
-                // label for well name
-                layer.bindTooltip(feature.properties.name, {permanent: true, direction: 'bottom', offset: [0,10]});
-
-                // check if point selection button has been triggered 
-                layer.on("click", point => { 
-                    map.closePopup(); 
-                    // prevents popup from opening since side panel automatically opens 
-                    if (!pointSelectBtnState) {
-                        // map.closePopup(); 
-                        SidePanel(point.target.feature.properties);
-                        pointSelectLayers = [];
-                        // choicesLayers = [];
-                        choicesLayers.length = 0;
-                       
-                    } else {
-                        console.log(point.target.feature.properties.name);
-
-                        // check if point was already clicked/selected 
-                        if (!pointSelectLayers.includes(point.target.feature.properties)) {
-                            pointSelectLayers.push(point.target.feature.properties);
-                            choicesLayers.push(point.target.feature.properties);
-                            createCheckBox(point.target.feature.properties.name);
-
-                            // create choice object and add to choices array 
-                            choices.push(createChoice(point.target.feature.properties.name, true));
-                            // console.log(choices);
-
-                        } else {
-                            alreadySelected(document.getElementById("notif"), point.target.feature.properties.name);
-                        }
-                    }
-                })
-            }
-            geoJsonData = L.geoJSON(geojson, { onEachFeature: (getValues) }).addTo(map);
-            layerControl.addOverlay(geoJsonData, "Layer Name");
-
-            // for search control 
-            let searchCoords = [];
-            let searchMarker = L.circle(searchCoords, {
-                color: "red",
-                fillColor: "",
-                fillOpacity: 0.5,
-                weight: 3,
-                radius: 300,
-            });
-
-            // search control 
-            const searchControl = new L.Control.Search({ 
-                container: "search-box",
-                layer: geoJsonData, 
-                initial: false,
-                collapsed: false,
-                propertyName: 'name', 
-                casesensitive: false, 
-                textPlaceholder: 'Search wells...', 
-                textErr: 'Sorry, could locate well. Please try again.', 
-                autoResize: true, 
-                moveToLocation: function(latlng, title, map) { 
-                    searchCoords = latlng;
-                    searchMarker = L.circle(searchCoords, {
-                        color: "red",
-                        fillColor: "",
-                        fillOpacity: 0.5,
-                        weight: 3,
-                        radius: 80,
-                        className: "search-pulse",
-                    });
-                    searchMarker.addTo(map);
-                    map.flyTo(latlng, 16); 
-                    setTimeout(() => {
-                        searchMarker.remove();
-                      }, 8000);
-                }, 
-                marker: false,
-            }); 
-
-            searchControl.on("search:locationfound", function(point) { 
-                // point.layer.openPopup(); 
-                SidePanel(point.layer.feature.properties);
-                document.getElementById("searchtext15").value = "";
-            }); 
-
-            // initialize search 
-            map.addControl(searchControl);
-        });
-
-    // leaflet lasso configuration 
-    map.on("lasso.finished", event => {
-        // error handing checks if there are layers within selection using array.length
-        if (event.layers.length != 0) {
-            completeSelection(document.getElementById("notif"), event.layers);
-            MultiplePlots(event.layers, document.getElementById("multi-plot-view-contents"), "lasso");
-            // console.log(event.layers);
-        } 
-
-        selectionMode = "lasso";
-    });
-
-    // functionality for #select-more-points btn in FullscreenModal.js 
-    let fullScreenModalMorePoints = document.getElementById("select-more-points");
-    fullScreenModalMorePoints.addEventListener("click", () => {
-        additionalSelection(document.getElementById("notif"));
-        if (lassoControl.enabled()) {
-            lassoControl.disable();
-        } else {
-            lassoControl.enable();
-        }
-    });
+    for (const item of gpz_maps) {
+        console.log(item.map);
+        getData(item.map);
+    }
 }
 
-// other components have access to this export 
-// TODO - include point selection control as an export along with lassoControl to be triggered back on/off upon clicking "Select more points to plot" button in FullscreenModal.js 
-export { selectionMode, lassoControl, pointSelectBtn };
+// retrieves json and adds to leaflet map 
+// param: path - string containing filepath 
+function getData(gpz_map) {
+    fetch(gpz_map.path)
+    .then(response => response.json())
+    .then(geojson => {
+        const polygon = L.geoJSON(geojson, {
+            style: {
+                color: gpz_map.color
+            }
+        });
 
-let selectionState;
+        const HEIGHT = 20;
+        const WIDTH = 20;
+        const FILL = gpz_map.color;
 
-export function updateSelectionStates() {
-    selectionState = {
-        method: "",
-        state: false,
-    }
+        polygon.bindPopup(`
+            <svg width="${WIDTH}" height="${HEIGHT}" xmlns="http://www.w3.org/2000/svg">
+                <rect 
+                    width="${WIDTH}" 
+                    height="${HEIGHT}" 
+                    fill="${FILL}" 
+                    rx="5"
+                    ></rect>
+            </svg>
+            <a 
+                href="${gpz_map.pdf}" 
+                target="_blank" 
+                rel="noreferrer noopener" 
+                title="View PDF of ${gpz_map.name}"
+                >${gpz_map.name}</a>
+            `);
 
-    for (let input of document.querySelectorAll('input')) {
-        if (input.checked) {
-            switch (input.className) { }
-        }
-    }
+        polygon.addTo(map);
+    });
+};
+
+function darkenHex(hex, pct) {
+    hex = hex.replace("#", ""); // clean string, remove #
+
+    // parse rgb 
+    let r = parseInt(hex.substring(0, 2), 16);
+    let g = parseInt(hex.substring(2, 4), 16);
+    let b = parseInt(hex.substring(4, 6), 16);
+
+    // reduce each channel by pct
+    r = Math.max(0, Math.floor( r * (1 - pct / 100)));
+    g = Math.max(0, Math.floor( r * (1 - pct / 100)));
+    b = Math.max(0, Math.floor( r * (1 - pct / 100)));
+
+    // convert back to hex, padding with 0 if needed 
+    const DARK_HEX = (n) => n.toString(16).padStart(2, "0");
+    return `#${DARK_HEX(r)}${DARK_HEX(g)}${DARK_HEX(b)}`;
 }
