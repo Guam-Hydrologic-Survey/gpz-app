@@ -37,54 +37,64 @@ export function About() {
     tr_btn_grp.className = "btn-group";
 
     // btn for technical report 
-    // const tr_btn = document.createElement("a");
-    // tr_btn.className = "btn btn-primary";
-    // tr_btn.setAttribute("title", "Coming soon!"); // update to tr.title when available 
-    // tr_btn.setAttribute("href", tr.url);
-    // tr_btn.setAttribute("target", "_blank");
-    // tr_btn.setAttribute("rel", "noreferrer noopener");
-    // tr_btn.setAttribute("role", "button");
-    // tr_btn.textContent = "WERI Technical Report"; // update with num when available 
+    const tr_btn = document.createElement("a");
+    tr_btn.className = "btn btn-primary";
+    tr_btn.setAttribute("title", "PDFs of GPZ Maps"); // update to tr.title when available 
+    tr_btn.setAttribute("href", tr.url);
+    tr_btn.setAttribute("target", "_blank");
+    tr_btn.setAttribute("rel", "noreferrer noopener");
+    tr_btn.setAttribute("role", "button");
+    tr_btn.textContent = "Groundwater Protection Zones Maps (CDM 1982 & DLM 1997)"; // update with num when available 
     
-    // // dropdown btn for assoc. technical reports 
-    // const toggle_dropdown = document.createElement("button");
-    // toggle_dropdown.className = "btn btn-primary dropdown-toggle dropdown-toggle-split";
-    // toggle_dropdown.setAttribute("role", "button");
-    // toggle_dropdown.setAttribute("data-bs-toggle", "dropdown");
-    // toggle_dropdown.setAttribute("aria-expanded", "false");
-    // toggle_dropdown.setAttribute("title", "View associated technical reports");
+    // dropdown btn for assoc. technical reports 
+    const toggle_dropdown = document.createElement("button");
+    toggle_dropdown.className = "btn btn-primary dropdown-toggle dropdown-toggle-split";
+    toggle_dropdown.setAttribute("role", "button");
+    toggle_dropdown.setAttribute("data-bs-toggle", "dropdown");
+    toggle_dropdown.setAttribute("aria-expanded", "false");
+    toggle_dropdown.setAttribute("title", "View PDFs of GPZ Maps");
 
-    // toggle_dropdown.innerHTML = /*html*/ `
-    // <span class="visually-hidden">Toggle Dropdown</span>
-    // `;
+    toggle_dropdown.innerHTML = /*html*/ `
+    <span class="visually-hidden">Toggle Dropdown</span>
+    `;
 
-    // const dropdown_menu = document.createElement("ul");
-    // dropdown_menu.className = "dropdown-menu";
+    const dropdown_menu = document.createElement("ul");
+    dropdown_menu.className = "dropdown-menu";
 
-    // // create first list item in dropdown menu
-    // dropdown_menu.innerHTML = /*html*/ `
-    // <li class="dropdown-item">Associated Technical Reports</li>
-    // <li><hr class="dropdown-divider"></li>
-    // `;
+    // create first list item in dropdown menu
+    dropdown_menu.innerHTML = /*html*/ `
+    <li class="dropdown-item">View PDFs of GPZ Maps</li>
+    <li><hr class="dropdown-divider"></li>
+    `;
 
-    // // iterate through assoc_trs list to populate dropdown menu 
-    // assoc_trs.forEach(tr => {
-    //   const li = document.createElement("li"); // wrapper for a tag
-    //   const a = document.createElement("a"); 
+    const li_cdm = document.createElement("li"); // wrapper for a tag
+    const li_dlm = document.createElement("li"); 
+    const a_cdm = document.createElement("a"); 
+    const a_dlm = document.createElement("a"); 
 
-    //   // a tag contents 
-    //   a.className = "dropdown-item";
-    //   a.setAttribute("href", tr.url);
-    //   a.setAttribute("target", "_blank");
-    //   a.setAttribute("rel", "noreferrer noopener");
-    //   a.setAttribute("title", tr.title);
-    //   a.textContent = `WERI TR ${tr.num} (${tr.author}, ${tr.year})`;
+    // a tag contents 
+    a_cdm.className = "dropdown-item";
+    a_cdm.setAttribute("href", "https://ghs-cdn.uog.edu/wp-content/databases/MAppFx/gpz-app/CDM82%20-%20Fig8%20GWPZ.pdf");
+    a_cdm.setAttribute("target", "_blank");
+    a_cdm.setAttribute("rel", "noreferrer noopener");
+    a_cdm.setAttribute("title", "GPZ CDM 1982");
+    a_cdm.textContent = "GPZ CDM 1982";
 
-    //   li.append(a);
-    //   dropdown_menu.append(li);
-    // });
+    // a tag contents 
+    a_dlm.className = "dropdown-item";
+    a_dlm.setAttribute("href", "https://ghs-cdn.uog.edu/wp-content/databases/MAppFx/gpz-app/1997-DLM-GPZ-Overlay-Map.pdf");
+    a_dlm.setAttribute("target", "_blank");
+    a_dlm.setAttribute("rel", "noreferrer noopener");
+    a_dlm.setAttribute("title", "GPZ DLM 1997");
+    a_dlm.textContent = "GPZ DLM 1997";
 
-    // tr_btn_grp.append(tr_btn, toggle_dropdown, dropdown_menu);
+    li_cdm.append(a_cdm);
+    li_dlm.append(a_dlm);
+
+    dropdown_menu.append(li_cdm);
+    dropdown_menu.append(li_dlm);
+
+    tr_btn_grp.append(tr_btn, toggle_dropdown, dropdown_menu);
 
     // modal header 
     const header = document.createElement("div");
@@ -99,6 +109,7 @@ export function About() {
     body.className = "modal-body";
     body.innerHTML = /*html*/ `
     <p>
+    This map features geo-referenced polygons from the the CDM 1982 and DLM 1997 GPZ maps.
     </p>
     `;
 
@@ -121,7 +132,7 @@ export function About() {
     `;
     
     // first, add dropdown menu for assoc. technical reports 
-    // footer.append(tr_btn_grp);
+    footer.append(tr_btn_grp);
 
     // lastly, add map libraries 
     footer.insertAdjacentHTML("beforeend", map_libs);
