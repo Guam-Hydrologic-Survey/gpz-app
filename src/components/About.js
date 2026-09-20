@@ -109,7 +109,7 @@ export function About() {
     body.className = "modal-body";
     body.innerHTML = /*html*/ `
     <p>
-    This map features geo-referenced polygons from the the CDM 1982 and DLM 1997 GPZ maps.
+    This map features geo-referenced polygons from the CDM 1982 and DLM 1997 GPZ maps.
     </p>
     `;
 
