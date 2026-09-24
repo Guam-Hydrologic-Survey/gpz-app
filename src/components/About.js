@@ -109,7 +109,13 @@ export function About() {
     body.className = "modal-body";
     body.innerHTML = /*html*/ `
     <p>
-    This map features geo-referenced polygons from the CDM 1982 and DLM 1997 GPZ maps.
+    The groundwater protection zone (GPZ) is an inland area that limits certain activities and potential discharges that may be detrimental to freshwater source. Some of these are the development plan of facilities where operations near high recharge areas such as surface depressions or sinkholes. The Northern Guam Lens Study (<a title="View CDN 1982 (PDF)" href="https://ghs-cdn.uog.edu/wp-content/databases/Library/Northern-Guam-Lens-Study/NGLS%205_BranchMinkBHA%2CCDM82-SummaryReportNGLSGEPA.pdf" target="_blank" rel="noreferrer noopener">CDM 1982</a>) first mapped the <a title="View GPZ map (PDF)" href="https://ghs-cdn.uog.edu/wp-content/databases/MAppFx/gpz-app/CDM82%20-%20Fig8%20GWPZ.pdf" target="_blank" rel="noreferrer noopener">GPZ</a>. The determination was based on production well performance analysis, terrain analysis, areas, roads, and ridgelines. A 4,000 feet buffer is delineated from the coast, north of Tumon Bay along the coast, all the way around clockwise to Route 4 and Route 10 intersection, except on the south flank of Mount Santa Rosa ridge. South of Tumon Bay is a further inland setback around the Guam International Airport and Harmon Industrial Park, which is along Route 16 and Route 10; municipal boundaries: Leyang and Balaku Streets, the road around the Guam Memorial Park, and along the ridgeline and edges by the Hagåtña Swamp. The delineation continues to cut over the Hagåtña Swamp, down the hill of Route 4 before Cost-U-Less, uphill to Route 24A west, then along Chalan Palasyo past Fort Santa Agueda, and towards the cliff edge around the Naval Hospital, and down to Marine Dr. in front of the Governor's Office (Adelup). South of the Pågu-Adilok Fault includes the ridgeline of the Ma'ina Watershed, and along the ridge of Alutom, before the Pågu Watershed. In 1997, Department of Land Management mapped an update to the <a title="View GPZ map (PDF)" href="https://ghs-cdn.uog.edu/wp-content/databases/MAppFx/gpz-app/CDM82%20-%20Fig8%20GWPZ.pdf" target="_blank" rel="noreferrer noopener">GPZ</a> with practical survey points. A referenced point is provided at the intersection of Route 1 and Route 16.
+    <br><br>
+    Both maps were made using a 4,000 ft buffer and georeferenced overlays for approximate delineation. The GPZ layers and basemaps may be selected with the <i><span class="term" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-html="true" data-bs-title="Layer Toggle" data-bs-content='Hover over this icon <i class="bi bi-stack"></i> to open the layer widget.'>layer widget</span></i> located on the bottom right corner of the map. The other widgets are basic map controls, zoom, recenter, and drawing tools. The original maps in PDFs are available through the <i>information widget</i> (the first button on the top right corner of the map).
+    <br><br>
+    <strong>Link to CDM 1982:</strong>
+    <br>
+    <a title="View CDM 1982 (PDF)" href="https://ghs-cdn.uog.edu/wp-content/databases/Library/Northern-Guam-Lens-Study/NGLS%205_BranchMinkBHA%2CCDM82-SummaryReportNGLSGEPA.pdf" target="_blank" rel="noreferrer noopener">Barrett, Harris & Assoc., & Camp, Dresser, & McKee (CDM). (1982) Northern Guam Lens Study, Summary Report, Guam Environmental Protection Agency.</a>
     </p>
     `;
 
@@ -126,7 +132,7 @@ export function About() {
       <ul class="dropdown-menu">
         <li><a class="dropdown-item" target="_blank" rel="noreferrer noopener" href="https://guamhydrologicsurvey.uog.edu/mappfx-library/" title="MAppFx Library on GHS">MAppFx Library</a></li>
         <li><a class="dropdown-item" target="_blank" rel="noreferrer noopener" href="https://guamhydrologicsurvey.uog.edu/web-mapps-library/" title="Web MApps Library on GHS">Web MApps</a></li>
-        <li><a class="dropdown-item" target="_blank" rel="noreferrer noopener" href="https://guamhydrologicsurvey.uog.edu/maps-posters-library/" title="Maps & Posters Library on GHS">Maps & Posters Library</a></li>
+        <li><a class="dropdown-item" target="_blank" guamgurel="noreferrer noopener" href="https://guamhydrologicsurvey.uog.edu/maps-posters-library/" title="Maps & Posters Library on GHS">Maps & Posters Library</a></li>
       </ul>
     </div>
     `;
@@ -147,6 +153,21 @@ export function About() {
     content_wrapper.append(content);
 
     modal.append(content_wrapper);
+
+    // extend bootstrap's default sanitizer allowList so svg markup isn't stripped 
+    const allowList = bootstrap.Tooltip.Default.allowList;
+    allowList.svg = ["xmlns", "width", "height", "viewbox", "fill", "stroke", "stroke-width", "stroke-linecap", "stroke-linejoin", "class"];
+    allowList.path = ["d"];
+    allowList.rect = ["width", "height", "x", "y", "rx", "ry"];
+    allowList.circle = ["cx", "cy", "r"];
+    allowList.line = ["x1", "y1", "x2", "y2"];
+    allowList.polyline = ["points"];
+    allowList.polygon = ["points"];
+    allowList.use = ["href", "xlink:href"];
+
+    document.querySelectorAll('[data-bs-toggle="popover"]').forEach(el => {
+      new bootstrap.Popover(el, { allowList });
+    });
 
     return modal;
 }
