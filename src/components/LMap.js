@@ -119,35 +119,67 @@ function getData(gpz_map, layerControl) {
     fetch(gpz_map.path)
     .then(response => response.json())
     .then(geojson => {
-        const polygon = L.geoJSON(geojson, {
-            style: {
-                color: gpz_map.color
-            }
-        });
 
         const HEIGHT = 20;
         const WIDTH = 20;
         const FILL = gpz_map.color;
 
-        polygon.bindPopup(`
-            <svg width="${WIDTH}" height="${HEIGHT}" xmlns="http://www.w3.org/2000/svg">
-                <rect 
-                    width="${WIDTH}" 
-                    height="${HEIGHT}" 
-                    fill="${FILL}" 
-                    rx="5"
-                    ></rect>
-            </svg>
-            <a 
-                href="${gpz_map.pdf}" 
-                target="_blank" 
-                rel="noreferrer noopener" 
-                title="View PDF of ${gpz_map.name}"
-                >${gpz_map.name}</a>
-            `);
+        const layer = L.geoJSON(geojson, {
+            pointToLayer: (feature, latlng) => {
+                return L.circleMarker(latlng, {
+                    radius: 8, 
+                    fillColor: FILL,
+                    color: "black",
+                    weight: 2,
+                    fillOpacity: 0.9
+                });
+            },
+            style: (feature) => {
+                const type = feature.geometry.type;
+
+                if (type === "Polygon" || type === "MultiPolygon") {
+                    return { color: FILL }
+                } 
+            },
+            onEachFeature: (feature, layer) => {
+                const type = feature.geometry?.type;
+
+                let html; 
+
+                if (/Polygon$/.test(type)) {
+                    html = `
+                    <svg width="${WIDTH}" height="${HEIGHT}" xmlns="http://www.w3.org/2000/svg">
+                        <rect 
+                            width="${WIDTH}" 
+                            height="${HEIGHT}" 
+                            fill="${FILL}" 
+                            rx="5"
+                            ></rect>
+                    </svg>
+                    <a 
+                        href="${gpz_map.pdf}" 
+                        target="_blank" 
+                        rel="noreferrer noopener" 
+                        title="View PDF of ${gpz_map.name}"
+                        >${gpz_map.name}</a>
+                    `;
+                } else {
+                    html = `
+                    <svg width="${WIDTH}" height="${HEIGHT}" xmlns="http://www.w3.org/2000/svg">
+                        <circle
+                            cx="10" cy="10" r="8" fill="${FILL}" stroke="black" stroke-width="2"
+                        />
+                    </svg>
+                    <p><strong>Reference point:</strong><br>Intersection between Route 1 & Route 16</p>
+                    `;
+                }
+
+                layer.bindPopup(html);
+            }
+        });
 
         // add to map and layer control 
-        polygon.addTo(map);
-        layerControl.addOverlay(polygon, `${gpz_map.name}`);
+        layer.addTo(map);
+        layerControl.addOverlay(layer, `${gpz_map.name}`);
     });
 };
