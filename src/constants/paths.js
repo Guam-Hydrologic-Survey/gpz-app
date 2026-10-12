@@ -19,6 +19,15 @@ export const gpz_maps = [
             pdf: "https://ghs-cdn.uog.edu/wp-content/databases/MAppFx/gpz-app/1997-DLM-GPZ-Overlay-Map.pdf",
             color: "#c77dff" // orange 
         }
+    },
+    {
+        map: {
+            name: "DLM 1997 Point",
+
+            path: "./src/data/DLM1997Point.json",
+            pdf: "",
+            color: "red"
+        }
     }
 ]
 
